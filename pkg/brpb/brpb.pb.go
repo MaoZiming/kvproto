@@ -416,6 +416,8 @@ type BackupMeta struct {
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
+
+	BackupSize uint64 `protobuf:"varint,25,opt,name=backup_size,json=backupSize,proto3" json:"backup_size,omitempty"`
 }
 
 func (m *BackupMeta) Reset()         { *m = BackupMeta{} }

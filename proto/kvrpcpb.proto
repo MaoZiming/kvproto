@@ -588,6 +588,7 @@ message RawPutRequest {
     string cf = 4;
     uint64 ttl = 5;
     bool for_cas = 6;
+    bytes guard = 7;
 }
 
 message RawPutResponse {
@@ -1277,6 +1278,7 @@ message Mutation {
     bytes key = 2;
     bytes value = 3;
     Assertion assertion = 4;
+    bytes guard = 5;
 }
 
 message MvccWrite {

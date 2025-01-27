@@ -8085,6 +8085,7 @@ type Mutation struct {
 	Key                  []byte    `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
 	Value                []byte    `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
 	Assertion            Assertion `protobuf:"varint,4,opt,name=assertion,proto3,enum=kvrpcpb.Assertion" json:"assertion,omitempty"`
+    Guard                []byte    `protobuf:"bytes,5,opt,name=guard,proto3" json:"guard,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
@@ -8149,6 +8150,13 @@ func (m *Mutation) GetAssertion() Assertion {
 		return m.Assertion
 	}
 	return Assertion_None
+}
+
+func (m *Mutation) GetGuard() []byte {
+	if m != nil {
+		return m.Guard
+	}
+	return nil
 }
 
 type MvccWrite struct {

@@ -2231,6 +2231,9 @@ type CommitRequest struct {
 	Keys [][]byte `protobuf:"bytes,3,rep,name=keys,proto3" json:"keys,omitempty"`
 	// Timestamp for the end of the transaction. Must be greater than `start_version`.
 	CommitVersion        uint64   `protobuf:"varint,4,opt,name=commit_version,json=commitVersion,proto3" json:"commit_version,omitempty"`
+	// Additional guard value for validation.
+	GuardValue string `protobuf:"bytes,5,opt,name=guard_value,json=guardValue,proto3" json:"guard_value,omitempty"`
+
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`

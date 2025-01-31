@@ -369,6 +369,7 @@ message CommitRequest {
     repeated bytes keys = 3;
     // Timestamp for the end of the transaction. Must be greater than `start_version`.
     uint64 commit_version = 4;
+    string guard_value = 6;
 }
 
 message CommitResponse {

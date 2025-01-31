@@ -951,6 +951,13 @@ func (m *PrewriteRequest) GetLockTtl() uint64 {
 	return 0
 }
 
+func (m *PrewriteRequest) GetGuardValue() string {
+	if m != nil {
+		return m.GuardValue
+	}
+	return ""
+}
+
 func (m *PrewriteRequest) GetSkipConstraintCheck() bool {
 	if m != nil {
 		return m.SkipConstraintCheck

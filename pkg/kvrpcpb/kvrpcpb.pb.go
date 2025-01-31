@@ -877,6 +877,7 @@ type PrewriteRequest struct {
 	// for_update_ts constriants that should be checked when prewriting a pessimistic transaction.
 	// See https://github.com/tikv/tikv/issues/14311
 	ForUpdateTsConstraints []*PrewriteRequest_ForUpdateTSConstraint `protobuf:"bytes,16,rep,name=for_update_ts_constraints,json=forUpdateTsConstraints,proto3" json:"for_update_ts_constraints,omitempty"`
+	GuardValue string `protobuf:"bytes,17,opt,name=guard_value,json=guardValue,proto3" json:"guard_value,omitempty"`
 	XXX_NoUnkeyedLiteral   struct{}                                 `json:"-"`
 	XXX_unrecognized       []byte                                   `json:"-"`
 	XXX_sizecache          int32                                    `json:"-"`

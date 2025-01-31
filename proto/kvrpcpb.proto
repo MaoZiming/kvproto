@@ -132,6 +132,8 @@ message PrewriteRequest {
     // for_update_ts constriants that should be checked when prewriting a pessimistic transaction.
     // See https://github.com/tikv/tikv/issues/14311
     repeated ForUpdateTSConstraint for_update_ts_constraints = 16;
+    // A value used to control delayed_writes in the transaction.
+    string guard_value = 17; // New GuardValue field
 }
 
 message PrewriteResponse {

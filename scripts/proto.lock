@@ -416,6 +416,11 @@
                 "name": "ranges",
                 "type": "BackupRange",
                 "is_repeated": true
+              },
+              {
+                "id": 25,
+                "name": "backup_size",
+                "type": "uint64"
               }
             ],
             "reserved_ids": [
@@ -8092,6 +8097,11 @@
                 "name": "for_update_ts_constraints",
                 "type": "ForUpdateTSConstraint",
                 "is_repeated": true
+              },
+              {
+                "id": 17,
+                "name": "guard_value",
+                "type": "string"
               }
             ],
             "messages": [
@@ -8578,6 +8588,11 @@
                 "id": 4,
                 "name": "commit_version",
                 "type": "uint64"
+              },
+              {
+                "id": 6,
+                "name": "guard_value",
+                "type": "string"
               }
             ],
             "reserved_ids": [
@@ -9166,6 +9181,11 @@
                 "id": 6,
                 "name": "for_cas",
                 "type": "bool"
+              },
+              {
+                "id": 7,
+                "name": "guard",
+                "type": "bytes"
               }
             ]
           },
@@ -10646,6 +10666,11 @@
                 "id": 4,
                 "name": "assertion",
                 "type": "Assertion"
+              },
+              {
+                "id": 5,
+                "name": "guard",
+                "type": "bytes"
               }
             ]
           },
@@ -12188,6 +12213,11 @@
                 "id": 8,
                 "name": "flashback_start_ts",
                 "type": "uint64"
+              },
+              {
+                "id": 9,
+                "name": "guard",
+                "type": "bytes"
               }
             ]
           },
@@ -15821,6 +15851,11 @@
               {
                 "id": 3,
                 "name": "value",
+                "type": "bytes"
+              },
+              {
+                "id": 4,
+                "name": "guard",
                 "type": "bytes"
               }
             ]

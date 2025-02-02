@@ -1,7 +1,3576 @@
 {
   "definitions": [
     {
-      "protopath": "autoid.proto",
+      "protopath": "include:/:eraftpb.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "EntryType",
+            "enum_fields": [
+              {
+                "name": "EntryNormal"
+              },
+              {
+                "name": "EntryConfChange",
+                "integer": 1
+              },
+              {
+                "name": "EntryConfChangeV2",
+                "integer": 2
+              }
+            ]
+          },
+          {
+            "name": "MessageType",
+            "enum_fields": [
+              {
+                "name": "MsgHup"
+              },
+              {
+                "name": "MsgBeat",
+                "integer": 1
+              },
+              {
+                "name": "MsgPropose",
+                "integer": 2
+              },
+              {
+                "name": "MsgAppend",
+                "integer": 3
+              },
+              {
+                "name": "MsgAppendResponse",
+                "integer": 4
+              },
+              {
+                "name": "MsgRequestVote",
+                "integer": 5
+              },
+              {
+                "name": "MsgRequestVoteResponse",
+                "integer": 6
+              },
+              {
+                "name": "MsgSnapshot",
+                "integer": 7
+              },
+              {
+                "name": "MsgHeartbeat",
+                "integer": 8
+              },
+              {
+                "name": "MsgHeartbeatResponse",
+                "integer": 9
+              },
+              {
+                "name": "MsgUnreachable",
+                "integer": 10
+              },
+              {
+                "name": "MsgSnapStatus",
+                "integer": 11
+              },
+              {
+                "name": "MsgCheckQuorum",
+                "integer": 12
+              },
+              {
+                "name": "MsgTransferLeader",
+                "integer": 13
+              },
+              {
+                "name": "MsgTimeoutNow",
+                "integer": 14
+              },
+              {
+                "name": "MsgReadIndex",
+                "integer": 15
+              },
+              {
+                "name": "MsgReadIndexResp",
+                "integer": 16
+              },
+              {
+                "name": "MsgRequestPreVote",
+                "integer": 17
+              },
+              {
+                "name": "MsgRequestPreVoteResponse",
+                "integer": 18
+              }
+            ]
+          },
+          {
+            "name": "ConfChangeTransition",
+            "enum_fields": [
+              {
+                "name": "Auto"
+              },
+              {
+                "name": "Implicit",
+                "integer": 1
+              },
+              {
+                "name": "Explicit",
+                "integer": 2
+              }
+            ]
+          },
+          {
+            "name": "ConfChangeType",
+            "enum_fields": [
+              {
+                "name": "AddNode"
+              },
+              {
+                "name": "RemoveNode",
+                "integer": 1
+              },
+              {
+                "name": "AddLearnerNode",
+                "integer": 2
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "Entry",
+            "fields": [
+              {
+                "id": 1,
+                "name": "entry_type",
+                "type": "EntryType"
+              },
+              {
+                "id": 2,
+                "name": "term",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "index",
+                "type": "uint64"
+              },
+              {
+                "id": 4,
+                "name": "data",
+                "type": "bytes"
+              },
+              {
+                "id": 6,
+                "name": "context",
+                "type": "bytes"
+              },
+              {
+                "id": 5,
+                "name": "sync_log",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "SnapshotMetadata",
+            "fields": [
+              {
+                "id": 1,
+                "name": "conf_state",
+                "type": "ConfState"
+              },
+              {
+                "id": 2,
+                "name": "index",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "term",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "Snapshot",
+            "fields": [
+              {
+                "id": 1,
+                "name": "data",
+                "type": "bytes"
+              },
+              {
+                "id": 2,
+                "name": "metadata",
+                "type": "SnapshotMetadata"
+              }
+            ]
+          },
+          {
+            "name": "Message",
+            "fields": [
+              {
+                "id": 1,
+                "name": "msg_type",
+                "type": "MessageType"
+              },
+              {
+                "id": 2,
+                "name": "to",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "from",
+                "type": "uint64"
+              },
+              {
+                "id": 4,
+                "name": "term",
+                "type": "uint64"
+              },
+              {
+                "id": 5,
+                "name": "log_term",
+                "type": "uint64"
+              },
+              {
+                "id": 6,
+                "name": "index",
+                "type": "uint64"
+              },
+              {
+                "id": 7,
+                "name": "entries",
+                "type": "Entry",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "commit",
+                "type": "uint64"
+              },
+              {
+                "id": 9,
+                "name": "snapshot",
+                "type": "Snapshot"
+              },
+              {
+                "id": 13,
+                "name": "request_snapshot",
+                "type": "uint64"
+              },
+              {
+                "id": 10,
+                "name": "reject",
+                "type": "bool"
+              },
+              {
+                "id": 11,
+                "name": "reject_hint",
+                "type": "uint64"
+              },
+              {
+                "id": 12,
+                "name": "context",
+                "type": "bytes"
+              },
+              {
+                "id": 14,
+                "name": "deprecated_priority",
+                "type": "uint64"
+              },
+              {
+                "id": 15,
+                "name": "priority",
+                "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "HardState",
+            "fields": [
+              {
+                "id": 1,
+                "name": "term",
+                "type": "uint64"
+              },
+              {
+                "id": 2,
+                "name": "vote",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "commit",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "ConfState",
+            "fields": [
+              {
+                "id": 1,
+                "name": "voters",
+                "type": "uint64",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "learners",
+                "type": "uint64",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "voters_outgoing",
+                "type": "uint64",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "learners_next",
+                "type": "uint64",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "auto_leave",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "ConfChange",
+            "fields": [
+              {
+                "id": 2,
+                "name": "change_type",
+                "type": "ConfChangeType"
+              },
+              {
+                "id": 3,
+                "name": "node_id",
+                "type": "uint64"
+              },
+              {
+                "id": 4,
+                "name": "context",
+                "type": "bytes"
+              },
+              {
+                "id": 1,
+                "name": "id",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "ConfChangeSingle",
+            "fields": [
+              {
+                "id": 1,
+                "name": "change_type",
+                "type": "ConfChangeType"
+              },
+              {
+                "id": 2,
+                "name": "node_id",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "ConfChangeV2",
+            "fields": [
+              {
+                "id": 1,
+                "name": "transition",
+                "type": "ConfChangeTransition"
+              },
+              {
+                "id": 2,
+                "name": "changes",
+                "type": "ConfChangeSingle",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "context",
+                "type": "bytes"
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "eraftpb"
+        }
+      }
+    },
+    {
+      "protopath": "include:/:gogoproto:/:gogo.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "google.protobuf.EnumOptions",
+            "fields": [
+              {
+                "id": 62001,
+                "name": "goproto_enum_prefix",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 62021,
+                "name": "goproto_enum_stringer",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 62022,
+                "name": "enum_stringer",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 62023,
+                "name": "enum_customname",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 62024,
+                "name": "enumdecl",
+                "type": "bool",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "google.protobuf.EnumValueOptions",
+            "fields": [
+              {
+                "id": 66001,
+                "name": "enumvalue_customname",
+                "type": "string",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "google.protobuf.FileOptions",
+            "fields": [
+              {
+                "id": 63001,
+                "name": "goproto_getters_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63002,
+                "name": "goproto_enum_prefix_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63003,
+                "name": "goproto_stringer_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63004,
+                "name": "verbose_equal_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63005,
+                "name": "face_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63006,
+                "name": "gostring_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63007,
+                "name": "populate_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63008,
+                "name": "stringer_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63009,
+                "name": "onlyone_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63013,
+                "name": "equal_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63014,
+                "name": "description_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63015,
+                "name": "testgen_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63016,
+                "name": "benchgen_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63017,
+                "name": "marshaler_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63018,
+                "name": "unmarshaler_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63019,
+                "name": "stable_marshaler_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63020,
+                "name": "sizer_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63021,
+                "name": "goproto_enum_stringer_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63022,
+                "name": "enum_stringer_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63023,
+                "name": "unsafe_marshaler_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63024,
+                "name": "unsafe_unmarshaler_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63025,
+                "name": "goproto_extensions_map_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63026,
+                "name": "goproto_unrecognized_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63027,
+                "name": "gogoproto_import",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63028,
+                "name": "protosizer_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63029,
+                "name": "compare_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63030,
+                "name": "typedecl_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63031,
+                "name": "enumdecl_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63032,
+                "name": "goproto_registration",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 63033,
+                "name": "messagename_all",
+                "type": "bool",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "google.protobuf.MessageOptions",
+            "fields": [
+              {
+                "id": 64001,
+                "name": "goproto_getters",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64003,
+                "name": "goproto_stringer",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64004,
+                "name": "verbose_equal",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64005,
+                "name": "face",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64006,
+                "name": "gostring",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64007,
+                "name": "populate",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 67008,
+                "name": "stringer",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64009,
+                "name": "onlyone",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64013,
+                "name": "equal",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64014,
+                "name": "description",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64015,
+                "name": "testgen",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64016,
+                "name": "benchgen",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64017,
+                "name": "marshaler",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64018,
+                "name": "unmarshaler",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64019,
+                "name": "stable_marshaler",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64020,
+                "name": "sizer",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64023,
+                "name": "unsafe_marshaler",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64024,
+                "name": "unsafe_unmarshaler",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64025,
+                "name": "goproto_extensions_map",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64026,
+                "name": "goproto_unrecognized",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64028,
+                "name": "protosizer",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64029,
+                "name": "compare",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64030,
+                "name": "typedecl",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 64033,
+                "name": "messagename",
+                "type": "bool",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "google.protobuf.FieldOptions",
+            "fields": [
+              {
+                "id": 65001,
+                "name": "nullable",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 65002,
+                "name": "embed",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 65003,
+                "name": "customtype",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 65004,
+                "name": "customname",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 65005,
+                "name": "jsontag",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 65006,
+                "name": "moretags",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 65007,
+                "name": "casttype",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 65008,
+                "name": "castkey",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 65009,
+                "name": "castvalue",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 65010,
+                "name": "stdtime",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 65011,
+                "name": "stdduration",
+                "type": "bool",
+                "optional": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/descriptor.proto"
+          }
+        ],
+        "package": {
+          "name": "gogoproto"
+        },
+        "options": [
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "GoGoProtos"
+          },
+          {
+            "name": "go_package",
+            "value": "github.com/gogo/protobuf/gogoproto"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:api:/:annotations.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "google.protobuf.MethodOptions",
+            "fields": [
+              {
+                "id": 72295728,
+                "name": "http",
+                "type": "HttpRule"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/http.proto"
+          },
+          {
+            "path": "google/protobuf/descriptor.proto"
+          }
+        ],
+        "package": {
+          "name": "google.api"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "google.golang.org/genproto/googleapis/api/annotations;annotations"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "AnnotationsProto"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.api"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GAPI"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:api:/:http.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Http",
+            "fields": [
+              {
+                "id": 1,
+                "name": "rules",
+                "type": "HttpRule",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "fully_decode_reserved_expansion",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "HttpRule",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "get",
+                "type": "string",
+                "oneof_parent": "pattern"
+              },
+              {
+                "id": 3,
+                "name": "put",
+                "type": "string",
+                "oneof_parent": "pattern"
+              },
+              {
+                "id": 4,
+                "name": "post",
+                "type": "string",
+                "oneof_parent": "pattern"
+              },
+              {
+                "id": 5,
+                "name": "delete",
+                "type": "string",
+                "oneof_parent": "pattern"
+              },
+              {
+                "id": 6,
+                "name": "patch",
+                "type": "string",
+                "oneof_parent": "pattern"
+              },
+              {
+                "id": 8,
+                "name": "custom",
+                "type": "CustomHttpPattern",
+                "oneof_parent": "pattern"
+              },
+              {
+                "id": 7,
+                "name": "body",
+                "type": "string"
+              },
+              {
+                "id": 12,
+                "name": "response_body",
+                "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "additional_bindings",
+                "type": "HttpRule",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "CustomHttpPattern",
+            "fields": [
+              {
+                "id": 1,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "path",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.api"
+        },
+        "options": [
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
+            "name": "go_package",
+            "value": "google.golang.org/genproto/googleapis/api/annotations;annotations"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "HttpProto"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.api"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GAPI"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:any.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Any",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type_url",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "bytes"
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "AnyProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:api.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Api",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "methods",
+                "type": "Method",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "options",
+                "type": "Option",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "version",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "source_context",
+                "type": "SourceContext"
+              },
+              {
+                "id": 6,
+                "name": "mixins",
+                "type": "Mixin",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "syntax",
+                "type": "Syntax"
+              }
+            ]
+          },
+          {
+            "name": "Method",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "request_type_url",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "request_streaming",
+                "type": "bool"
+              },
+              {
+                "id": 4,
+                "name": "response_type_url",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "response_streaming",
+                "type": "bool"
+              },
+              {
+                "id": 6,
+                "name": "options",
+                "type": "Option",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "syntax",
+                "type": "Syntax"
+              }
+            ]
+          },
+          {
+            "name": "Mixin",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "root",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/source_context.proto"
+          },
+          {
+            "path": "google/protobuf/type.proto"
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "ApiProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:compiler:/:plugin.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Version",
+            "fields": [
+              {
+                "id": 1,
+                "name": "major",
+                "type": "int32",
+                "optional": true
+              },
+              {
+                "id": 2,
+                "name": "minor",
+                "type": "int32",
+                "optional": true
+              },
+              {
+                "id": 3,
+                "name": "patch",
+                "type": "int32",
+                "optional": true
+              },
+              {
+                "id": 4,
+                "name": "suffix",
+                "type": "string",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "CodeGeneratorRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "file_to_generate",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "parameter",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 15,
+                "name": "proto_file",
+                "type": "FileDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "compiler_version",
+                "type": "Version",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "CodeGeneratorResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "error",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 15,
+                "name": "file",
+                "type": "File",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "File",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string",
+                    "optional": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "insertion_point",
+                    "type": "string",
+                    "optional": true
+                  },
+                  {
+                    "id": 15,
+                    "name": "content",
+                    "type": "string",
+                    "optional": true
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/descriptor.proto"
+          }
+        ],
+        "package": {
+          "name": "google.protobuf.compiler"
+        },
+        "options": [
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf.compiler"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "PluginProtos"
+          },
+          {
+            "name": "go_package",
+            "value": "plugin_go"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:descriptor.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "FieldDescriptorProto.Type",
+            "enum_fields": [
+              {
+                "name": "TYPE_DOUBLE",
+                "integer": 1
+              },
+              {
+                "name": "TYPE_FLOAT",
+                "integer": 2
+              },
+              {
+                "name": "TYPE_INT64",
+                "integer": 3
+              },
+              {
+                "name": "TYPE_UINT64",
+                "integer": 4
+              },
+              {
+                "name": "TYPE_INT32",
+                "integer": 5
+              },
+              {
+                "name": "TYPE_FIXED64",
+                "integer": 6
+              },
+              {
+                "name": "TYPE_FIXED32",
+                "integer": 7
+              },
+              {
+                "name": "TYPE_BOOL",
+                "integer": 8
+              },
+              {
+                "name": "TYPE_STRING",
+                "integer": 9
+              },
+              {
+                "name": "TYPE_GROUP",
+                "integer": 10
+              },
+              {
+                "name": "TYPE_MESSAGE",
+                "integer": 11
+              },
+              {
+                "name": "TYPE_BYTES",
+                "integer": 12
+              },
+              {
+                "name": "TYPE_UINT32",
+                "integer": 13
+              },
+              {
+                "name": "TYPE_ENUM",
+                "integer": 14
+              },
+              {
+                "name": "TYPE_SFIXED32",
+                "integer": 15
+              },
+              {
+                "name": "TYPE_SFIXED64",
+                "integer": 16
+              },
+              {
+                "name": "TYPE_SINT32",
+                "integer": 17
+              },
+              {
+                "name": "TYPE_SINT64",
+                "integer": 18
+              }
+            ]
+          },
+          {
+            "name": "FieldDescriptorProto.Label",
+            "enum_fields": [
+              {
+                "name": "LABEL_OPTIONAL",
+                "integer": 1
+              },
+              {
+                "name": "LABEL_REQUIRED",
+                "integer": 2
+              },
+              {
+                "name": "LABEL_REPEATED",
+                "integer": 3
+              }
+            ]
+          },
+          {
+            "name": "FileOptions.OptimizeMode",
+            "enum_fields": [
+              {
+                "name": "SPEED",
+                "integer": 1
+              },
+              {
+                "name": "CODE_SIZE",
+                "integer": 2
+              },
+              {
+                "name": "LITE_RUNTIME",
+                "integer": 3
+              }
+            ]
+          },
+          {
+            "name": "FieldOptions.CType",
+            "enum_fields": [
+              {
+                "name": "STRING"
+              },
+              {
+                "name": "CORD",
+                "integer": 1
+              },
+              {
+                "name": "STRING_PIECE",
+                "integer": 2
+              }
+            ]
+          },
+          {
+            "name": "FieldOptions.JSType",
+            "enum_fields": [
+              {
+                "name": "JS_NORMAL"
+              },
+              {
+                "name": "JS_STRING",
+                "integer": 1
+              },
+              {
+                "name": "JS_NUMBER",
+                "integer": 2
+              }
+            ]
+          },
+          {
+            "name": "MethodOptions.IdempotencyLevel",
+            "enum_fields": [
+              {
+                "name": "IDEMPOTENCY_UNKNOWN"
+              },
+              {
+                "name": "NO_SIDE_EFFECTS",
+                "integer": 1
+              },
+              {
+                "name": "IDEMPOTENT",
+                "integer": 2
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "FileDescriptorSet",
+            "fields": [
+              {
+                "id": 1,
+                "name": "file",
+                "type": "FileDescriptorProto",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "FileDescriptorProto",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 2,
+                "name": "package",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 3,
+                "name": "dependency",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "public_dependency",
+                "type": "int32",
+                "is_repeated": true
+              },
+              {
+                "id": 11,
+                "name": "weak_dependency",
+                "type": "int32",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "message_type",
+                "type": "DescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "enum_type",
+                "type": "EnumDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "service",
+                "type": "ServiceDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "extension",
+                "type": "FieldDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "options",
+                "type": "FileOptions",
+                "optional": true
+              },
+              {
+                "id": 9,
+                "name": "source_code_info",
+                "type": "SourceCodeInfo",
+                "optional": true
+              },
+              {
+                "id": 12,
+                "name": "syntax",
+                "type": "string",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "DescriptorProto",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 2,
+                "name": "field",
+                "type": "FieldDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "extension",
+                "type": "FieldDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "nested_type",
+                "type": "DescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "enum_type",
+                "type": "EnumDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "extension_range",
+                "type": "ExtensionRange",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "oneof_decl",
+                "type": "OneofDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "options",
+                "type": "MessageOptions",
+                "optional": true
+              },
+              {
+                "id": 9,
+                "name": "reserved_range",
+                "type": "ReservedRange",
+                "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "reserved_name",
+                "type": "string",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "ExtensionRange",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "start",
+                    "type": "int32",
+                    "optional": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "end",
+                    "type": "int32",
+                    "optional": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "options",
+                    "type": "ExtensionRangeOptions",
+                    "optional": true
+                  }
+                ]
+              },
+              {
+                "name": "ReservedRange",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "start",
+                    "type": "int32",
+                    "optional": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "end",
+                    "type": "int32",
+                    "optional": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ExtensionRangeOptions",
+            "fields": [
+              {
+                "id": 999,
+                "name": "uninterpreted_option",
+                "type": "UninterpretedOption",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "FieldDescriptorProto",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 3,
+                "name": "number",
+                "type": "int32",
+                "optional": true
+              },
+              {
+                "id": 4,
+                "name": "label",
+                "type": "Label",
+                "optional": true
+              },
+              {
+                "id": 5,
+                "name": "type",
+                "type": "Type",
+                "optional": true
+              },
+              {
+                "id": 6,
+                "name": "type_name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 2,
+                "name": "extendee",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 7,
+                "name": "default_value",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 9,
+                "name": "oneof_index",
+                "type": "int32",
+                "optional": true
+              },
+              {
+                "id": 10,
+                "name": "json_name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 8,
+                "name": "options",
+                "type": "FieldOptions",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "OneofDescriptorProto",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 2,
+                "name": "options",
+                "type": "OneofOptions",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "EnumDescriptorProto",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "EnumValueDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "options",
+                "type": "EnumOptions",
+                "optional": true
+              },
+              {
+                "id": 4,
+                "name": "reserved_range",
+                "type": "EnumReservedRange",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "reserved_name",
+                "type": "string",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "EnumReservedRange",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "start",
+                    "type": "int32",
+                    "optional": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "end",
+                    "type": "int32",
+                    "optional": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "EnumValueDescriptorProto",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 2,
+                "name": "number",
+                "type": "int32",
+                "optional": true
+              },
+              {
+                "id": 3,
+                "name": "options",
+                "type": "EnumValueOptions",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "ServiceDescriptorProto",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 2,
+                "name": "method",
+                "type": "MethodDescriptorProto",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "options",
+                "type": "ServiceOptions",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "MethodDescriptorProto",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 2,
+                "name": "input_type",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 3,
+                "name": "output_type",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 4,
+                "name": "options",
+                "type": "MethodOptions",
+                "optional": true
+              },
+              {
+                "id": 5,
+                "name": "client_streaming",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 6,
+                "name": "server_streaming",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "FileOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "java_package",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 8,
+                "name": "java_outer_classname",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 10,
+                "name": "java_multiple_files",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 20,
+                "name": "java_generate_equals_and_hash",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 27,
+                "name": "java_string_check_utf8",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 9,
+                "name": "optimize_for",
+                "type": "OptimizeMode",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "SPEED"
+                  }
+                ]
+              },
+              {
+                "id": 11,
+                "name": "go_package",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 16,
+                "name": "cc_generic_services",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 17,
+                "name": "java_generic_services",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 18,
+                "name": "py_generic_services",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 42,
+                "name": "php_generic_services",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 23,
+                "name": "deprecated",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 31,
+                "name": "cc_enable_arenas",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 36,
+                "name": "objc_class_prefix",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 37,
+                "name": "csharp_namespace",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 39,
+                "name": "swift_prefix",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 40,
+                "name": "php_class_prefix",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 41,
+                "name": "php_namespace",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 999,
+                "name": "uninterpreted_option",
+                "type": "UninterpretedOption",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "MessageOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "message_set_wire_format",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "no_standard_descriptor_accessor",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "deprecated",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 7,
+                "name": "map_entry",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 999,
+                "name": "uninterpreted_option",
+                "type": "UninterpretedOption",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "FieldOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "ctype",
+                "type": "CType",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "STRING"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "packed",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 6,
+                "name": "jstype",
+                "type": "JSType",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "JS_NORMAL"
+                  }
+                ]
+              },
+              {
+                "id": 5,
+                "name": "lazy",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "deprecated",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 10,
+                "name": "weak",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 999,
+                "name": "uninterpreted_option",
+                "type": "UninterpretedOption",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "OneofOptions",
+            "fields": [
+              {
+                "id": 999,
+                "name": "uninterpreted_option",
+                "type": "UninterpretedOption",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "EnumOptions",
+            "fields": [
+              {
+                "id": 2,
+                "name": "allow_alias",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 3,
+                "name": "deprecated",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 999,
+                "name": "uninterpreted_option",
+                "type": "UninterpretedOption",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "EnumValueOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "deprecated",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 999,
+                "name": "uninterpreted_option",
+                "type": "UninterpretedOption",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "ServiceOptions",
+            "fields": [
+              {
+                "id": 33,
+                "name": "deprecated",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 999,
+                "name": "uninterpreted_option",
+                "type": "UninterpretedOption",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "MethodOptions",
+            "fields": [
+              {
+                "id": 33,
+                "name": "deprecated",
+                "type": "bool",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "false"
+                  }
+                ]
+              },
+              {
+                "id": 34,
+                "name": "idempotency_level",
+                "type": "IdempotencyLevel",
+                "optional": true,
+                "options": [
+                  {
+                    "name": "default",
+                    "value": "IDEMPOTENCY_UNKNOWN"
+                  }
+                ]
+              },
+              {
+                "id": 999,
+                "name": "uninterpreted_option",
+                "type": "UninterpretedOption",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "UninterpretedOption",
+            "fields": [
+              {
+                "id": 2,
+                "name": "name",
+                "type": "NamePart",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "identifier_value",
+                "type": "string",
+                "optional": true
+              },
+              {
+                "id": 4,
+                "name": "positive_int_value",
+                "type": "uint64",
+                "optional": true
+              },
+              {
+                "id": 5,
+                "name": "negative_int_value",
+                "type": "int64",
+                "optional": true
+              },
+              {
+                "id": 6,
+                "name": "double_value",
+                "type": "double",
+                "optional": true
+              },
+              {
+                "id": 7,
+                "name": "string_value",
+                "type": "bytes",
+                "optional": true
+              },
+              {
+                "id": 8,
+                "name": "aggregate_value",
+                "type": "string",
+                "optional": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "NamePart",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name_part",
+                    "type": "string",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "is_extension",
+                    "type": "bool",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "SourceCodeInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "location",
+                "type": "Location",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Location",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "path",
+                    "type": "int32",
+                    "is_repeated": true,
+                    "options": [
+                      {
+                        "name": "packed",
+                        "value": "true"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 2,
+                    "name": "span",
+                    "type": "int32",
+                    "is_repeated": true,
+                    "options": [
+                      {
+                        "name": "packed",
+                        "value": "true"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 3,
+                    "name": "leading_comments",
+                    "type": "string",
+                    "optional": true
+                  },
+                  {
+                    "id": 4,
+                    "name": "trailing_comments",
+                    "type": "string",
+                    "optional": true
+                  },
+                  {
+                    "id": 6,
+                    "name": "leading_detached_comments",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "GeneratedCodeInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "annotation",
+                "type": "Annotation",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Annotation",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "path",
+                    "type": "int32",
+                    "is_repeated": true,
+                    "options": [
+                      {
+                        "name": "packed",
+                        "value": "true"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 2,
+                    "name": "source_file",
+                    "type": "string",
+                    "optional": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "begin",
+                    "type": "int32",
+                    "optional": true
+                  },
+                  {
+                    "id": 4,
+                    "name": "end",
+                    "type": "int32",
+                    "optional": true
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "descriptor"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "DescriptorProtos"
+          },
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.Reflection"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          },
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
+            "name": "optimize_for",
+            "value": "SPEED"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:duration.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Duration",
+            "fields": [
+              {
+                "id": 1,
+                "name": "seconds",
+                "type": "int64"
+              },
+              {
+                "id": 2,
+                "name": "nanos",
+                "type": "int32"
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "DurationProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:empty.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Empty"
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "EmptyProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          },
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:field_mask.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "FieldMask",
+            "fields": [
+              {
+                "id": 1,
+                "name": "paths",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "FieldMaskProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:source_context.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "SourceContext",
+            "fields": [
+              {
+                "id": 1,
+                "name": "file_name",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "SourceContextProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:struct.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "NullValue",
+            "enum_fields": [
+              {
+                "name": "NULL_VALUE"
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "Struct",
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "fields",
+                  "type": "Value"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Value",
+            "fields": [
+              {
+                "id": 1,
+                "name": "null_value",
+                "type": "NullValue",
+                "oneof_parent": "kind"
+              },
+              {
+                "id": 2,
+                "name": "number_value",
+                "type": "double",
+                "oneof_parent": "kind"
+              },
+              {
+                "id": 3,
+                "name": "string_value",
+                "type": "string",
+                "oneof_parent": "kind"
+              },
+              {
+                "id": 4,
+                "name": "bool_value",
+                "type": "bool",
+                "oneof_parent": "kind"
+              },
+              {
+                "id": 5,
+                "name": "struct_value",
+                "type": "Struct",
+                "oneof_parent": "kind"
+              },
+              {
+                "id": 6,
+                "name": "list_value",
+                "type": "ListValue",
+                "oneof_parent": "kind"
+              }
+            ]
+          },
+          {
+            "name": "ListValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "values",
+                "type": "Value",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "StructProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:timestamp.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Timestamp",
+            "fields": [
+              {
+                "id": 1,
+                "name": "seconds",
+                "type": "int64"
+              },
+              {
+                "id": 2,
+                "name": "nanos",
+                "type": "int32"
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "TimestampProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:type.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "Field.Kind",
+            "enum_fields": [
+              {
+                "name": "TYPE_UNKNOWN"
+              },
+              {
+                "name": "TYPE_DOUBLE",
+                "integer": 1
+              },
+              {
+                "name": "TYPE_FLOAT",
+                "integer": 2
+              },
+              {
+                "name": "TYPE_INT64",
+                "integer": 3
+              },
+              {
+                "name": "TYPE_UINT64",
+                "integer": 4
+              },
+              {
+                "name": "TYPE_INT32",
+                "integer": 5
+              },
+              {
+                "name": "TYPE_FIXED64",
+                "integer": 6
+              },
+              {
+                "name": "TYPE_FIXED32",
+                "integer": 7
+              },
+              {
+                "name": "TYPE_BOOL",
+                "integer": 8
+              },
+              {
+                "name": "TYPE_STRING",
+                "integer": 9
+              },
+              {
+                "name": "TYPE_GROUP",
+                "integer": 10
+              },
+              {
+                "name": "TYPE_MESSAGE",
+                "integer": 11
+              },
+              {
+                "name": "TYPE_BYTES",
+                "integer": 12
+              },
+              {
+                "name": "TYPE_UINT32",
+                "integer": 13
+              },
+              {
+                "name": "TYPE_ENUM",
+                "integer": 14
+              },
+              {
+                "name": "TYPE_SFIXED32",
+                "integer": 15
+              },
+              {
+                "name": "TYPE_SFIXED64",
+                "integer": 16
+              },
+              {
+                "name": "TYPE_SINT32",
+                "integer": 17
+              },
+              {
+                "name": "TYPE_SINT64",
+                "integer": 18
+              }
+            ]
+          },
+          {
+            "name": "Field.Cardinality",
+            "enum_fields": [
+              {
+                "name": "CARDINALITY_UNKNOWN"
+              },
+              {
+                "name": "CARDINALITY_OPTIONAL",
+                "integer": 1
+              },
+              {
+                "name": "CARDINALITY_REQUIRED",
+                "integer": 2
+              },
+              {
+                "name": "CARDINALITY_REPEATED",
+                "integer": 3
+              }
+            ]
+          },
+          {
+            "name": "Syntax",
+            "enum_fields": [
+              {
+                "name": "SYNTAX_PROTO2"
+              },
+              {
+                "name": "SYNTAX_PROTO3",
+                "integer": 1
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "Type",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "fields",
+                "type": "Field",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "oneofs",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "options",
+                "type": "Option",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "source_context",
+                "type": "SourceContext"
+              },
+              {
+                "id": 6,
+                "name": "syntax",
+                "type": "Syntax"
+              }
+            ]
+          },
+          {
+            "name": "Field",
+            "fields": [
+              {
+                "id": 1,
+                "name": "kind",
+                "type": "Kind"
+              },
+              {
+                "id": 2,
+                "name": "cardinality",
+                "type": "Cardinality"
+              },
+              {
+                "id": 3,
+                "name": "number",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "type_url",
+                "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "oneof_index",
+                "type": "int32"
+              },
+              {
+                "id": 8,
+                "name": "packed",
+                "type": "bool"
+              },
+              {
+                "id": 9,
+                "name": "options",
+                "type": "Option",
+                "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "json_name",
+                "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "default_value",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Enum",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "enumvalue",
+                "type": "EnumValue",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "options",
+                "type": "Option",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "source_context",
+                "type": "SourceContext"
+              },
+              {
+                "id": 5,
+                "name": "syntax",
+                "type": "Syntax"
+              }
+            ]
+          },
+          {
+            "name": "EnumValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "number",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "options",
+                "type": "Option",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Option",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "Any"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/any.proto"
+          },
+          {
+            "path": "google/protobuf/source_context.proto"
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "TypeProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:google:/:protobuf:/:wrappers.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "DoubleValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "double"
+              }
+            ]
+          },
+          {
+            "name": "FloatValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "float"
+              }
+            ]
+          },
+          {
+            "name": "Int64Value",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "UInt64Value",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "Int32Value",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "UInt32Value",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "BoolValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "StringValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "BytesValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "bytes"
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.protobuf"
+        },
+        "options": [
+          {
+            "name": "csharp_namespace",
+            "value": "Google.Protobuf.WellKnownTypes"
+          },
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
+            "name": "go_package",
+            "value": "types"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.protobuf"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "WrappersProto"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GPB"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "include:/:rustproto.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "google.protobuf.FileOptions",
+            "fields": [
+              {
+                "id": 17001,
+                "name": "expose_oneof_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17003,
+                "name": "expose_fields_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17004,
+                "name": "generate_accessors_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17011,
+                "name": "carllerche_bytes_for_bytes_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17012,
+                "name": "carllerche_bytes_for_string_all",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17035,
+                "name": "lite_runtime_all",
+                "type": "bool",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "google.protobuf.MessageOptions",
+            "fields": [
+              {
+                "id": 17001,
+                "name": "expose_oneof",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17003,
+                "name": "expose_fields",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17004,
+                "name": "generate_accessors",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17011,
+                "name": "carllerche_bytes_for_bytes",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17012,
+                "name": "carllerche_bytes_for_string",
+                "type": "bool",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "google.protobuf.FieldOptions",
+            "fields": [
+              {
+                "id": 17003,
+                "name": "expose_fields_field",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17004,
+                "name": "generate_accessors_field",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17011,
+                "name": "carllerche_bytes_for_bytes_field",
+                "type": "bool",
+                "optional": true
+              },
+              {
+                "id": 17012,
+                "name": "carllerche_bytes_for_string_field",
+                "type": "bool",
+                "optional": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/descriptor.proto"
+          }
+        ],
+        "package": {
+          "name": "rustproto"
+        }
+      }
+    },
+    {
+      "protopath": "proto:/:autoid.proto",
       "def": {
         "messages": [
           {
@@ -158,7 +3727,7 @@
       }
     },
     {
-      "protopath": "brpb.proto",
+      "protopath": "proto:/:brpb.proto",
       "def": {
         "enums": [
           {
@@ -1671,7 +5240,7 @@
       }
     },
     {
-      "protopath": "cdcpb.proto",
+      "protopath": "proto:/:cdcpb.proto",
       "def": {
         "enums": [
           {
@@ -2205,7 +5774,7 @@
       }
     },
     {
-      "protopath": "configpb.proto",
+      "protopath": "proto:/:configpb.proto",
       "def": {
         "enums": [
           {
@@ -2687,7 +6256,7 @@
       }
     },
     {
-      "protopath": "coprocessor.proto",
+      "protopath": "proto:/:coprocessor.proto",
       "def": {
         "messages": [
           {
@@ -3088,7 +6657,7 @@
       }
     },
     {
-      "protopath": "deadlock.proto",
+      "protopath": "proto:/:deadlock.proto",
       "def": {
         "enums": [
           {
@@ -3243,7 +6812,7 @@
       }
     },
     {
-      "protopath": "debugpb.proto",
+      "protopath": "proto:/:debugpb.proto",
       "def": {
         "enums": [
           {
@@ -4134,7 +7703,7 @@
       }
     },
     {
-      "protopath": "diagnosticspb.proto",
+      "protopath": "proto:/:diagnosticspb.proto",
       "def": {
         "enums": [
           {
@@ -4378,7 +7947,7 @@
       }
     },
     {
-      "protopath": "disaggregated.proto",
+      "protopath": "proto:/:disaggregated.proto",
       "def": {
         "messages": [
           {
@@ -4794,7 +8363,7 @@
       }
     },
     {
-      "protopath": "disk_usage.proto",
+      "protopath": "proto:/:disk_usage.proto",
       "def": {
         "enums": [
           {
@@ -4835,7 +8404,7 @@
       }
     },
     {
-      "protopath": "encryptionpb.proto",
+      "protopath": "proto:/:encryptionpb.proto",
       "def": {
         "enums": [
           {
@@ -5094,7 +8663,7 @@
       }
     },
     {
-      "protopath": "enginepb.proto",
+      "protopath": "proto:/:enginepb.proto",
       "def": {
         "messages": [
           {
@@ -5314,7 +8883,7 @@
       }
     },
     {
-      "protopath": "errorpb.proto",
+      "protopath": "proto:/:errorpb.proto",
       "def": {
         "messages": [
           {
@@ -5739,7 +9308,7 @@
       }
     },
     {
-      "protopath": "gcpb.proto",
+      "protopath": "proto:/:gcpb.proto",
       "def": {
         "enums": [
           {
@@ -6063,7 +9632,7 @@
       }
     },
     {
-      "protopath": "import_kvpb.proto",
+      "protopath": "proto:/:import_kvpb.proto",
       "def": {
         "enums": [
           {
@@ -6441,7 +10010,7 @@
       }
     },
     {
-      "protopath": "import_sstpb.proto",
+      "protopath": "proto:/:import_sstpb.proto",
       "def": {
         "enums": [
           {
@@ -7379,7 +10948,7 @@
       }
     },
     {
-      "protopath": "keyspacepb.proto",
+      "protopath": "proto:/:keyspacepb.proto",
       "def": {
         "enums": [
           {
@@ -7639,7 +11208,7 @@
       }
     },
     {
-      "protopath": "kvrpcpb.proto",
+      "protopath": "proto:/:kvrpcpb.proto",
       "def": {
         "enums": [
           {
@@ -11412,7 +14981,7 @@
       }
     },
     {
-      "protopath": "logbackuppb.proto",
+      "protopath": "proto:/:logbackuppb.proto",
       "def": {
         "messages": [
           {
@@ -11571,7 +15140,7 @@
       }
     },
     {
-      "protopath": "meta_storagepb.proto",
+      "protopath": "proto:/:meta_storagepb.proto",
       "def": {
         "enums": [
           {
@@ -11921,7 +15490,7 @@
       }
     },
     {
-      "protopath": "metapb.proto",
+      "protopath": "proto:/:metapb.proto",
       "def": {
         "enums": [
           {
@@ -12216,8 +15785,8 @@
               },
               {
                 "id": 9,
-                "name": "guard_value",
-                "type": "string"
+                "name": "guard",
+                "type": "bytes"
               }
             ]
           },
@@ -12286,7 +15855,7 @@
       }
     },
     {
-      "protopath": "mpp.proto",
+      "protopath": "proto:/:mpp.proto",
       "def": {
         "messages": [
           {
@@ -12596,7 +16165,7 @@
       }
     },
     {
-      "protopath": "pdpb.proto",
+      "protopath": "proto:/:pdpb.proto",
       "def": {
         "enums": [
           {
@@ -13664,11 +17233,6 @@
                 "id": 18,
                 "name": "approximate_kv_size",
                 "type": "uint64"
-              },
-              {
-                "id": 19,
-                "name": "guard_value",
-                "type": "string"
               }
             ],
             "reserved_ids": [
@@ -15680,7 +19244,7 @@
       }
     },
     {
-      "protopath": "raft_cmdpb.proto",
+      "protopath": "proto:/:raft_cmdpb.proto",
       "def": {
         "enums": [
           {
@@ -17050,7 +20614,7 @@
       }
     },
     {
-      "protopath": "raft_serverpb.proto",
+      "protopath": "proto:/:raft_serverpb.proto",
       "def": {
         "enums": [
           {
@@ -17886,7 +21450,7 @@
       }
     },
     {
-      "protopath": "recoverdatapb.proto",
+      "protopath": "proto:/:recoverdatapb.proto",
       "def": {
         "messages": [
           {
@@ -18112,7 +21676,7 @@
       }
     },
     {
-      "protopath": "replication_modepb.proto",
+      "protopath": "proto:/:replication_modepb.proto",
       "def": {
         "enums": [
           {
@@ -18253,7 +21817,7 @@
       }
     },
     {
-      "protopath": "resource_manager.proto",
+      "protopath": "proto:/:resource_manager.proto",
       "def": {
         "enums": [
           {
@@ -18931,7 +22495,7 @@
       }
     },
     {
-      "protopath": "resource_usage_agent.proto",
+      "protopath": "proto:/:resource_usage_agent.proto",
       "def": {
         "messages": [
           {
@@ -19053,7 +22617,7 @@
       }
     },
     {
-      "protopath": "schedulingpb.proto",
+      "protopath": "proto:/:schedulingpb.proto",
       "def": {
         "enums": [
           {
@@ -19256,11 +22820,6 @@
                 "id": 14,
                 "name": "interval",
                 "type": "pdpb.TimeInterval"
-              },
-              {
-                "id": 15,
-                "name": "guard_value",
-                "type": "string"
               }
             ]
           },
@@ -19381,7 +22940,7 @@
       }
     },
     {
-      "protopath": "tikvpb.proto",
+      "protopath": "proto:/:tikvpb.proto",
       "def": {
         "messages": [
           {
@@ -20261,7 +23820,7 @@
       }
     },
     {
-      "protopath": "tracepb.proto",
+      "protopath": "proto:/:tracepb.proto",
       "def": {
         "messages": [
           {
@@ -20419,7 +23978,7 @@
       }
     },
     {
-      "protopath": "tsopb.proto",
+      "protopath": "proto:/:tsopb.proto",
       "def": {
         "enums": [
           {

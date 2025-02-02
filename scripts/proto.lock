@@ -16174,6 +16174,11 @@
                 "id": 5,
                 "name": "share_source_region_size",
                 "type": "bool"
+              },
+              {
+                "id": 6,
+                "name": "guard_value",
+                "type": "string"
               }
             ]
           },

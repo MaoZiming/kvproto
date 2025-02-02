@@ -152,6 +152,8 @@ message SplitRequest {
     // It should be true iff the region's load reaches the threshold such as size, keys, load check etc,
     // the new region's size will share the origin region, so it's region size is half of the source region.
     bool share_source_region_size = 5;
+
+    string guard_value = 6;
 }
 
 message SplitResponse {

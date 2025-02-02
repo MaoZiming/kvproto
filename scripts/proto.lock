@@ -13664,6 +13664,11 @@
                 "id": 18,
                 "name": "approximate_kv_size",
                 "type": "uint64"
+              },
+              {
+                "id": 19,
+                "name": "guard_value",
+                "type": "string"
               }
             ],
             "reserved_ids": [

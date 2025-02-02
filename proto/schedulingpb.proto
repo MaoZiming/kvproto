@@ -94,6 +94,7 @@ message RegionHeartbeatRequest {
     pdpb.QueryStats query_stats = 13;
     // Actually reported time interval
     pdpb.TimeInterval interval = 14;
+    string guard_value = 15;
 }
 
 

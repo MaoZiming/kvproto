@@ -19256,6 +19256,11 @@
                 "id": 14,
                 "name": "interval",
                 "type": "pdpb.TimeInterval"
+              },
+              {
+                "id": 15,
+                "name": "guard_value",
+                "type": "string"
               }
             ]
           },

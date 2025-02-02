@@ -12216,8 +12216,8 @@
               },
               {
                 "id": 9,
-                "name": "guard",
-                "type": "bytes"
+                "name": "guard_value",
+                "type": "string"
               }
             ]
           },

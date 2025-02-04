@@ -7909,6 +7909,11 @@
                 "id": 3,
                 "name": "version",
                 "type": "uint64"
+              },
+              {
+                "id": 4,
+                "name": "guard_value",
+                "type": "string"
               }
             ]
           },

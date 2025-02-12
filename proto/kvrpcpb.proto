@@ -152,6 +152,18 @@ message PrewriteResponse {
     ExecDetailsV2 exec_details_v2 = 5;
 }
 
+message SetGuardRequest {
+    Context context = 1;
+    bytes start_key = 2;
+    bytes end_key = 3;
+    string guard_value = 5;
+}
+
+message SetGuardResponse {
+    errorpb.Error region_error = 1;
+    string error = 2;
+}
+
 // Used to specify the behavior when a pessimistic lock request is woken up after waiting for another
 // lock.
 enum PessimisticLockWakeUpMode {

@@ -17260,6 +17260,11 @@
                 "id": 12,
                 "name": "disk_usage",
                 "type": "disk_usage.DiskUsage"
+              },
+              {
+                "id": 13,
+                "name": "guard_value",
+                "type": "string"
               }
             ]
           },

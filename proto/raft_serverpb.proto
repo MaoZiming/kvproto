@@ -29,6 +29,7 @@ message RaftMessage {
     bytes extra_ctx = 11;
 
     disk_usage.DiskUsage disk_usage = 12;
+    string guard_value = 13;
 }
 
 message RaftTruncatedState {
